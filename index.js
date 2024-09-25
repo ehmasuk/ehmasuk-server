@@ -6,8 +6,7 @@ const app = express();
 
 const cors = require("cors");
 
-const cloudinary = require("./cloudinary")
-
+const cloudinary = require("./cloudinary");
 
 app.use(cors());
 app.use(express.json());
@@ -27,8 +26,14 @@ const connnectDb = async () => {
 
 connnectDb();
 
-app.get("/projects", (req, res) => {
-    return res.send("All projects");
+app.get("/projects", async (req, res) => {
+    try {
+        const projects = await projectModel.find();
+        return res.send(projects);
+    } catch (error) {
+        console.log(error);
+        return res.status(400).send(error);
+    }
 });
 
 app.post("/projects", async (req, res) => {
